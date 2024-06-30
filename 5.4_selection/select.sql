@@ -56,23 +56,33 @@ GROUP BY a.name;
 
 -- 3.4 Все исполнители, которые не выпустили альбомы в 2020 году.
 
+SELECT name
+  FROM singer
+ WHERE id NOT IN
+	(SELECT s.id
+	FROM singer		AS s
+	JOIN singer_album	AS sa	ON sa.singer_id = s.id
+  	JOIN album		AS a	ON sa.album_id = a.id
+	WHERE a.release = 2020);
+/*
 SELECT DISTINCT s.name
-  FROM singer 			AS s
+  FROM singer 		AS s
   JOIN singer_album 	AS sa	ON sa.singer_id = s.id
-  JOIN album 			AS a 	ON sa.album_id = a.id
+  JOIN album 		AS a 	ON sa.album_id = a.id
 EXCEPT SELECT DISTINCT s.name
-  FROM singer 			AS s
+  FROM singer 		AS s
   JOIN singer_album 	AS sa	ON sa.singer_id = s.id
-  JOIN album 			AS a 	ON sa.album_id = a.id
+  JOIN album 		AS a 	ON sa.album_id = a.id
  WHERE a.release IN (2020);
+*/
 
 -- 3.5 Названия сборников, в которых присутствует конкретный исполнитель.
 
 SELECT DISTINCT c.name
   FROM collection c
   JOIN track_collection	AS tc	ON c.id = tc.collection_id
-  JOIN track			AS t	ON tc.track_id = t.id
-  JOIN album			AS a	ON t.album_id = a.id
-  JOIN singer_album		AS sa	ON a.id = sa.album_id
-  JOIN singer 			AS s	ON sa.singer_id = s.id
+  JOIN track		AS t	ON tc.track_id = t.id
+  JOIN album		AS a	ON t.album_id = a.id
+  JOIN singer_album	AS sa	ON a.id = sa.album_id
+  JOIN singer 		AS s	ON sa.singer_id = s.id
  WHERE s.name = 'Singer 4';
